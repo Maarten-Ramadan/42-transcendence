@@ -5,12 +5,20 @@ import { Repository } from 'typeorm';
 import { UserEntity } from './models/user.entity'
 import { IUser } from './models/user.interface'
 
+
+
+import { TypeORMSession } from '../sessions/session.entity';
+
+
+
 @Injectable()
 export class UserService {
 
 	constructor (
 		@InjectRepository(UserEntity)
-		private userRepository: Repository<UserEntity>
+		private userRepository: Repository<UserEntity>,
+		@InjectRepository(TypeORMSession)
+		private sessionsRepository: Repository<TypeORMSession>
 	) {}
 
 	add(user: IUser): Observable<IUser> {
@@ -37,12 +45,25 @@ export class UserService {
 		});
 	}
 	
-	async createUser(intraId: string): Promise<UserEntity> {
+	async createUser(data: { id: number, login: string }): Promise<UserEntity> {
 		const user: IUser = {
-			id: 1234,
-			name: "mrjvs",
-			intra_id: intraId,
+			name: data.login,
+			intra_id: data.id.toString(),
 		}
+
 		return await this.userRepository.save(user);
+	}
+	
+
+
+
+
+
+	findSessions(): Observable<TypeORMSession[]> {
+		return from(this.sessionsRepository.find());
+	}
+
+	deleteAll() {
+		return this.sessionsRepository.clear();
 	}
 }

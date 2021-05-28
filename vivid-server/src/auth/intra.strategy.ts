@@ -4,6 +4,8 @@ import { HttpService, Inject, Injectable } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
 
+
+
 @Injectable()
 export class IntraStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -16,7 +18,7 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
       tokenURL: 'https://api.intra.42.fr/oauth/token',
       clientID: configService.get('oauth.intra.clientId'),
       clientSecret: configService.get('oauth.intra.clientSecret'),
-      callbackURL: 'http://localhost:8080/api/v1/auth/login',
+      callbackURL: 'http://localhost:3000/api/v1/auth/login',
       scopes: ['public']
     });
   }
@@ -27,6 +29,9 @@ export class IntraStrategy extends PassportStrategy(Strategy) {
         headers: { Authorization: `Bearer ${accessToken}` },
       })
       .toPromise();
-    return await this.authService.validateUser(data.id)
+
+	var { id, login } = data;
+
+    return await this.authService.validateUser({id, login})
   }
 }

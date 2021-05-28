@@ -8,6 +8,7 @@ import configuration from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { PassportModule } from '@nestjs/passport';
+import { entities } from './sessions/index';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { PassportModule } from '@nestjs/passport';
 			password: configService.get('db.password'),
 			database: configService.get('db.database'),
 			autoLoadEntities: true,
+			entities,
 			synchronize: true
 		}),
 		inject: [ConfigService]

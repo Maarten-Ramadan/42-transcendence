@@ -18,6 +18,16 @@ export class UserController {
 		return this.userService.findAll();
 	}
 
+	@Get('sessions')
+	findSessions() {
+		return this.userService.findSessions();
+	}
+
+	@Delete('sessions')
+	deleteSessions() {
+		return this.userService.deleteAll();
+	}
+
 	@Get(':id')
 	async findUser(@Param('id') id: string): Promise<IUser> {
 		return await this.userService.findUser(id);
@@ -27,4 +37,5 @@ export class UserController {
 	deleteUser(@Param('id') id: string) {
 		return this.userService.deleteUser(id);
 	}
+
 }

@@ -8,11 +8,11 @@ export class AuthService {
 		private userService: UserService
 	) {}
 
-    async validateUser(intraId: string): Promise<any> {
-		let user = await this.userService.findIntraUser(intraId);
+    async validateUser(data: { id: number, login: string }): Promise<any> {
+		let user = await this.userService.findIntraUser(data.id.toString());
 
 		if (!user) {
-            user = await this.userService.createUser(intraId);
+            user = await this.userService.createUser(data);
 		}
 
 		return user;
